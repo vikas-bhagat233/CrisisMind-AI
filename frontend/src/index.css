@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-base-950 text-ink font-body antialiased;
+  }
+  ::selection {
+    @apply bg-signal/30 text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid #3D9AF7;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-base-800 border border-base-600/60 rounded-xl shadow-panel;
+  }
+  .eyebrow {
+    @apply text-[11px] tracking-[0.18em] uppercase text-ink-muted font-mono;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: crisismind-ai-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir backend"
+    envVars:
+      - key: FIREWORKS_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
