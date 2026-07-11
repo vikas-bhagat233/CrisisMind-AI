@@ -15,8 +15,21 @@ export function runLiveAnalysis(
   locationHint: string | undefined,
   onEvent: (event: LiveAnalysisEvent) => void
 ): () => void {
-  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const socket = new WebSocket(`${protocol}://${window.location.host}/api/ws/analyze`);
+  const apiBase = (import.meta as any).env?.VITE_API_BASE;
+  let socketUrl = "";
+  if (apiBase) {
+    // Strip "/api" suffix if present
+    const cleanBase = apiBase.endsWith("/api") ? apiBase.slice(0, -4) : apiBase;
+    const wsProtocol = cleanBase.startsWith("https:") ? "wss" : "ws";
+    // Strip http:// or https:// to get host
+    const host = cleanBase.replace(/^https?:\/\//, "");
+    socketUrl = `${wsProtocol}://${host}/api/ws/analyze`;
+  } else {
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    socketUrl = `${protocol}://${window.location.host}/api/ws/analyze`;
+  }
+
+  const socket = new WebSocket(socketUrl);
 
   socket.onopen = () => {
     socket.send(JSON.stringify({ query, location_hint: locationHint }));

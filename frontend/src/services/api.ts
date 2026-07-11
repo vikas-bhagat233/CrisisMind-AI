@@ -1,6 +1,15 @@
 import type { CrisisReport, EmergencyFeedItem } from "../types";
 
-const BASE = "/api";
+const getApiBase = () => {
+  const envVal = (import.meta as any).env?.VITE_API_BASE;
+  if (envVal) {
+    // Standardize URL to end with /api
+    return envVal.endsWith("/api") ? envVal : `${envVal}/api`;
+  }
+  return "/api";
+};
+
+const BASE = getApiBase();
 
 async function json<T>(res: Response): Promise<T> {
   if (!res.ok) {
